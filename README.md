@@ -1,2 +1,2 @@
-# JetSnail-Wpf
-A custom control library for WPF
+# JetSnail-ControlLibrary
+Custom librarys for Windows Prsentation Frameworm and UWP lately
