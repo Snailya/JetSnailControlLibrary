@@ -1,0 +1,60 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:system="clr-namespace:System;assembly=mscorlib">
+
+  <FontFamily x:Key="FontAwesome">pack://application:,,,/JetSnailControlLibrary.WPF;component/Fonts/#Font Awesome 5 Pro Light</FontFamily>
+  <FontFamily x:Key="FontApp">Microsoft YaHei UI</FontFamily>
+  
+  <!-- Headline 1 -->
+  <FontWeight x:Key="Headline1.FontWeight">Light</FontWeight>
+  <system:Double x:Key="Headline1.FontSize">96</system:Double>
+
+  <!-- Headline 2 -->
+  <FontWeight x:Key="Headline2.FontWeight">Light</FontWeight>
+  <system:Double x:Key="Headline2.FontSize">60</system:Double>
+
+  <!-- Headline 3 -->
+  <FontWeight x:Key="Headline3.FontWeight">Normal</FontWeight>
+  <system:Double x:Key="Headline3.FontSize">48</system:Double>
+
+  <!-- Headline 4 -->
+  <FontWeight x:Key="Headline4.FontWeight">Normal</FontWeight>
+  <system:Double x:Key="Headline4.FontSize">34</system:Double>
+
+  <!-- Headline 5 -->
+  <FontWeight x:Key="Headline5.FontWeight">Normal</FontWeight>
+  <system:Double x:Key="Headline5.FontSize">24</system:Double>
+
+  <!-- Headline 6-->
+  <FontWeight x:Key="Headline6.FontWeight">Medium</FontWeight>
+  <system:Double x:Key="Headline6.FontSize">20</system:Double>
+
+  <!-- Subtitle 1 -->
+  <FontWeight x:Key="Subtitle1.FontWeight">Normal</FontWeight>
+  <system:Double x:Key="Subtitle1.FontSize">16</system:Double>
+
+  <!-- Subtitle 2 -->
+  <FontWeight x:Key="Subtitle2.FontWeight">Medium</FontWeight>
+  <system:Double x:Key="Subtitle2.FontSize">14</system:Double>
+
+  <!-- Body 1 -->
+  <FontWeight x:Key="Body1.FontWeight">Normal</FontWeight>
+  <system:Double x:Key="Body1.FontSize">16</system:Double>
+
+  <!-- Body 2 -->
+  <FontWeight x:Key="Body2.FontWeight">Normal</FontWeight>
+  <system:Double x:Key="Body2.FontSize">14</system:Double>
+
+  <!-- Button -->
+  <FontWeight x:Key="Button.FontWeight">Medium</FontWeight>
+  <system:Double x:Key="Button.FontSize">14</system:Double>
+
+  <!-- Caption -->
+  <FontWeight x:Key="Caption.FontWeight">Normal</FontWeight>
+  <system:Double x:Key="Caption.FontSize">12</system:Double>
+
+  <!-- Overline -->
+  <FontWeight x:Key="Overline.FontWeight">Normal</FontWeight>
+  <system:Double x:Key="Overline.FontSize">10</system:Double>
+
+</ResourceDictionary>

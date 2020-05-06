@@ -1,0 +1,149 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{BB495C38-ADA3-468E-882F-61481B90D6DA}</ProjectGuid>
+    <OutputType>library</OutputType>
+    <RootNamespace>JetSnailControlLibrary.WPF</RootNamespace>
+    <AssemblyName>JetSnailControlLibrary.WPF</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="PresentationFramework.Aero2, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\PresentationFramework.Aero2.1.0.1\lib\PresentationFramework.Aero2.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="AppResources.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AttachedProperties\ColorProperties.cs" />
+    <Compile Include="AttachedProperties\ControlProperties.cs" />
+    <Compile Include="AttachedProperties\TextProperties.cs" />
+    <Compile Include="Controls\AutoFilterDataGrid\AutoFilterDataGrid.cs" />
+    <Compile Include="Controls\AutoFilterDataGrid\Filter\AutoFilterDataGridColumnFilter.cs" />
+    <Compile Include="Controls\AutoFilterDataGrid\Filter\Expression\BaseFilterEx.cs" />
+    <Compile Include="Controls\AutoFilterDataGrid\Filter\Expression\EqualBaseFilterEx.cs" />
+    <Compile Include="Controls\AutoFilterDataGrid\Filter\Expression\IFilterex.cs" />
+    <Compile Include="Controls\AutoFilterDataGrid\Filter\Expression\IMultiValueFilterEx.cs" />
+    <Compile Include="Controls\AutoFilterDataGrid\Filter\Expression\StringBaseFilterEx.cs" />
+    <Compile Include="Controls\AutoFilterDataGrid\Filter\FilterViewHost.cs" />
+    <Compile Include="Controls\AutoFilterDataGrid\Filter\ViewModels\FilterViewHostViewModel.cs" />
+    <Compile Include="Controls\AutoFilterDataGrid\Filter\ViewModels\IFilterViewModel.cs" />
+    <Compile Include="Controls\AutoFilterDataGrid\Filter\ViewModels\IMultiValueFilterViewModel.cs" />
+    <Compile Include="Controls\AutoFilterDataGrid\Filter\ViewModels\IStringFilterViewModel.cs" />
+    <Compile Include="Controls\AutoFilterDataGrid\Filter\ViewModels\MultiValueFilterItem\IMultiValueFilterItem.cs" />
+    <Compile Include="Controls\AutoFilterDataGrid\Filter\ViewModels\MultiValueFilterItem\MultiValueFilterItem.cs" />
+    <Compile Include="Controls\AutoFilterDataGrid\Filter\ViewModels\MultiValueFilterViewModel.cs" />
+    <Compile Include="Controls\AutoFilterDataGrid\Filter\ViewModels\StringFilterViewModel.cs" />
+    <Compile Include="Controls\AutoFilterDataGrid\Filter\Views\BaseFilterView.cs" />
+    <Compile Include="Controls\AutoFilterDataGrid\Filter\Views\IFilterView.cs" />
+    <Compile Include="Controls\AutoFilterDataGrid\Filter\Views\MultiValueFilterView.cs" />
+    <Compile Include="Controls\AutoFilterDataGrid\Filter\Views\StringFilterView.cs" />
+    <Compile Include="Controls\RippleEffectDecorator\RippleEffectDecorator.cs" />
+    <Compile Include="Helper\VisualHelper.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="RelayCommand.cs" />
+    <Compile Include="StaticCommands.cs" />
+    <Compile Include="ValueConverter\AlgorithmConverter.cs" />
+    <Compile Include="ValueConverter\BaseValueConverter.cs" />
+    <Compile Include="ValueConverter\BooleanToVisibilityConverter.cs" />
+    <Compile Include="ValueConverter\BorderClipConverter.cs" />
+    <Compile Include="ValueConverter\ReserveBooleanConverter.cs" />
+    <Compile Include="ValueConverter\SolidColorBrushOpcatiyConverter.cs" />
+    <Compile Include="ValueConverter\ZeroToEmptyStringConverter.cs" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <Resource Include="Fonts\fa-light-300.ttf" />
+    <None Include="Controls\AutoFilterDataGrid\Filter\FilterDiagram.cd" />
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="XamlResources_Application\1\01-ColorResources.txaml" />
+    <None Include="XamlResources_Application\1\02-FontResources.txaml" />
+    <None Include="XamlResources_Application\1\03-BaseStyles.txaml" />
+    <None Include="XamlResources_Application\2\04-ButtonBase.txaml" />
+    <None Include="XamlResources_Application\2\05-HeaderedContentControl.txaml" />
+    <None Include="XamlResources_Application\2\06-ScrollViewer.txaml" />
+    <None Include="XamlResources_Application\2\07-GroupItem.txaml" />
+    <None Include="XamlResources_Application\2\08-TextBoxBase.txaml" />
+    <None Include="XamlResources_Application\2\09-ComboBox.txaml" />
+    <None Include="XamlResources_Application\2\09-ListBox.txaml" />
+    <None Include="XamlResources_Application\2\09-TabControl.txaml" />
+    <None Include="XamlResources_Application\2\11-TreeView.txaml" />
+    <None Include="XamlResources_Application\2\12-DataGrid.txaml" />
+    <None Include="XamlResources_CustomControls\1\01-RippleEffectDecorator.txaml" />
+    <None Include="XamlResources_CustomControls\1\02-AutoFilterDataGrid.txaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="XamlResources_Application\Readme.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="XamlResources_CustomControls\Readme.txt" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>$(SolutionDir)..\..\WpfMergingXamlResources\XamlDictionaryMergeTool\bin\$(ConfigurationName)\XamlDictionaryMergeTool.exe "$(ProjectDir)XamlResources_Application" "$(ProjectDir)AppResources.xaml"
+$(SolutionDir)..\..\WpfMergingXamlResources\\XamlDictionaryMergeTool\bin\$(ConfigurationName)\XamlDictionaryMergeTool.exe "$(ProjectDir)XamlResources_CustomControls" "$(ProjectDir)Themes\Generic.xaml"</PreBuildEvent>
+  </PropertyGroup>
+</Project>

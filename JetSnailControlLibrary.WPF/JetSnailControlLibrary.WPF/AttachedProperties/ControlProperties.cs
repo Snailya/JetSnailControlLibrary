@@ -1,0 +1,120 @@
+﻿using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+
+namespace JetSnailControlLibrary.WPF
+{
+    public class ControlProperties
+    {
+        #region IsBusyProperty
+
+        /// <summary>
+        ///     The IsBusy attached property for a anything that wants to flag if the control is busy.
+        /// </summary>
+        public static readonly DependencyProperty IsBusyProperty =
+            DependencyProperty.RegisterAttached("IsBusy", typeof(bool),
+                typeof(ControlProperties),
+                new UIPropertyMetadata(false));
+
+
+        /// <summary>
+        ///     Sets the IsBusy
+        /// </summary>
+        public static void SetIsBusy(DependencyObject obj, bool value)
+        {
+            obj.SetValue(IsBusyProperty, value);
+        }
+
+        /// <summary>
+        ///     Gets the IsBusy
+        /// </summary>
+        public static bool GetIsBusy(DependencyObject obj)
+        {
+            return (bool) obj.GetValue(IsBusyProperty);
+        }
+
+        #endregion
+
+        #region GroupByProperty
+
+        /// <summary>
+        ///     The GroupBy attached property for a anything that wants a grouped view to display.
+        /// </summary>
+        public static readonly DependencyProperty GroupByProperty =
+            DependencyProperty.RegisterAttached("GroupBy", typeof(string),
+                typeof(ControlProperties),
+                new UIPropertyMetadata(string.Empty, OnGroupByPropertyChanged));
+
+        /// <summary>
+        ///     Add group description to the view when GroupBy property changed.
+        /// </summary>
+        /// <param name="d"></param>
+        /// <param name="e"></param>
+        private static void OnGroupByPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+
+            // Make sure it is a list box
+            if (!(d is ListBox listBox)) return;
+
+            var myView = (CollectionView) CollectionViewSource.GetDefaultView(listBox.ItemsSource);
+            if (myView == null) return;
+
+            myView.GroupDescriptions.Clear();
+
+            if (string.IsNullOrEmpty((string)e.NewValue)) return;
+
+            if (!myView.CanGroup) return;
+            var groupDescription
+                = new PropertyGroupDescription((string) e.NewValue);
+            myView.GroupDescriptions.Add(groupDescription);
+        }
+
+        /// <summary>
+        ///     Sets the GroupBy property
+        /// </summary>
+        public static void SetGroupBy(DependencyObject obj, string value)
+        {
+            obj.SetValue(GroupByProperty, value);
+        }
+
+        /// <summary>
+        ///     Gets the GroupBy property
+        /// </summary>
+        public static string GetGroupBy(DependencyObject obj)
+        {
+            return (string) obj.GetValue(GroupByProperty);
+        }
+
+        #endregion
+
+        #region AttachedTemplateProperty for combobox
+
+        /// <summary>
+        ///     The AttachedTemplate attached property for a Combobox that that want's to has a different template of selected
+        ///     item.
+        /// </summary>
+        public static readonly DependencyProperty AttachedTemplateProperty =
+            DependencyProperty.RegisterAttached("AttachedTemplate", typeof(ControlTemplate),
+                typeof(ControlProperties),
+                new FrameworkPropertyMetadata(null));
+
+
+        /// <summary>
+        ///     Sets the AttachedTemplate.
+        /// </summary>
+        public static void SetAttachedTemplate(DependencyObject obj, Style value)
+        {
+            obj.SetValue(AttachedTemplateProperty, value);
+        }
+
+        /// <summary>
+        ///     Gets the AttachedTemplate.
+        /// </summary>
+        public static Style GetAttachedTemplate(DependencyObject obj)
+        {
+            return (Style) obj.GetValue(AttachedTemplateProperty);
+        }
+
+        #endregion
+    }
+}

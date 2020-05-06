@@ -1,0 +1,84 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:JetSnailControlLibrary.WPF">
+
+    <!-- __________Control Base Settings__________ -->
+    <!-- default font, alignment and color properties -->
+    <Style TargetType="{x:Type TextBlock}">
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+
+        <Setter Property="FontFamily" Value="{StaticResource FontApp}" />
+        <Setter Property="FontWeight" Value="{StaticResource Body1.FontWeight}" />
+        <Setter Property="FontSize" Value="{StaticResource Body1.FontSize}" />
+    </Style>
+
+    <Style TargetType="{x:Type Image}">
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+
+    <Style TargetType="{x:Type Control}">
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+
+        <Setter Property="FontFamily" Value="{StaticResource FontApp}" />
+        <Setter Property="FontWeight" Value="{StaticResource Body1.FontWeight}" />
+        <Setter Property="FontSize" Value="{StaticResource Body1.FontSize}" />
+    </Style>
+    
+    <Style x:Key="Header.Page" TargetType="{x:Type TextBlock}">
+        <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="FontWeight" Value="{StaticResource Headline3.FontWeight}" />
+        <Setter Property="FontSize" Value="{StaticResource Headline3.FontSize}" />
+    </Style>
+
+    <Style x:Key="Header.Control" TargetType="{x:Type TextBlock}">
+        <Setter Property="FontWeight" Value="{StaticResource Headline4.FontWeight}" />
+        <Setter Property="FontSize" Value="{StaticResource Headline4.FontSize}" />
+    </Style>
+
+    <!-- Derived -->
+    <Style x:Key="SpinningAnimation" TargetType="{x:Type TextBlock}">
+        <Setter Property="FontFamily" Value="{StaticResource FontAwesome}" />
+        <Setter Property="FontSize" Value="120" />
+        <Setter Property="Foreground">
+            <Setter.Value>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1" Opacity="0.5">
+                    <GradientStop Color="White" Offset="0.0" />
+                    <GradientStop Color="{StaticResource Primary}" Offset="1.0" />
+                </LinearGradientBrush>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Text" Value="&#xf110;" />
+        <Setter Property="RenderTransformOrigin" Value="0.5, 0.5" />
+        <Setter Property="RenderTransform">
+            <Setter.Value>
+                <RotateTransform />
+            </Setter.Value>
+        </Setter>
+        <Style.Resources>
+            <Storyboard x:Key="Spin">
+                <DoubleAnimation
+                    Storyboard.TargetProperty="(UIElement.RenderTransform).(RotateTransform.Angle)"
+                    From="0"
+                    To="360"
+                    Duration="0:0:2"
+                    RepeatBehavior="Forever" />
+            </Storyboard>
+        </Style.Resources>
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=IsVisible}" Value="True">
+                <DataTrigger.EnterActions>
+                    <BeginStoryboard Name="SpinStoryboard" Storyboard="{StaticResource Spin}" />
+                </DataTrigger.EnterActions>
+                <DataTrigger.ExitActions>
+                    <RemoveStoryboard BeginStoryboardName="SpinStoryboard" />
+                </DataTrigger.ExitActions>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+</ResourceDictionary>

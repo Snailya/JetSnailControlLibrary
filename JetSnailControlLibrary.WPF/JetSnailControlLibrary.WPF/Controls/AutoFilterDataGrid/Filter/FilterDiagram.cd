@@ -1,0 +1,107 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" GroupingSetting="Access" MembersFormat="NameAndType">
+  <Class Name="Vsto.Excel.EqualFilterEx&lt;T&gt;">
+    <Position X="0.75" Y="3" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>AAACAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAA=</HashCode>
+      <FileName>Controls\AutoFilterDataGrid\Filter\Expression\EqualFilterEx.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Vsto.Excel.FilterEx">
+    <Position X="2.5" Y="0.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAACAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Controls\AutoFilterDataGrid\Filter\Expression\FilterEx.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Vsto.Excel.StringFilterEx">
+    <Position X="4.75" Y="3" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Controls\AutoFilterDataGrid\Filter\Expression\StringFilterEx.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Vsto.Excel.MultiValueFilterItem&lt;T&gt;" BaseTypeListCollapsed="true">
+    <Position X="14.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAIAAAAAEAAAAAAAAgAAgAAAAAAAIAAgAAAAAAA=</HashCode>
+      <FileName>Controls\AutoFilterDataGrid\Filter\ViewModels\MultiValueFilterItem\MultiValueFilterItem.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Vsto.Excel.MultiValueFilterViewModel&lt;T&gt;" BaseTypeListCollapsed="true">
+    <Position X="14.5" Y="3.5" Width="4.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAEAAAAAACACAAAAAAAAAAIAAAAIAAAIAAAAA=</HashCode>
+      <FileName>Controls\AutoFilterDataGrid\Filter\ViewModels\MultiValueFilterViewModel.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Vsto.Excel.BaseFilterView&lt;T&gt;" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="12.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Controls\AutoFilterDataGrid\Filter\Views\BaseFilterView.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Vsto.Excel.MultiValueFilterView">
+    <Position X="12.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Controls\AutoFilterDataGrid\Filter\Views\MultiValueFilterView.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="Vsto.Excel.IFilterEx">
+    <Position X="9.5" Y="0.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAACAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Controls\AutoFilterDataGrid\Filter\Expression\IFilterEx.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Vsto.Excel.IMultiValueFilterEx&lt;T&gt;">
+    <Position X="9.5" Y="2.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Controls\AutoFilterDataGrid\Filter\Expression\IMultiValueFilterEx.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Vsto.Excel.IMultiValueFilterItem">
+    <Position X="0.5" Y="6.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>Controls\AutoFilterDataGrid\Filter\ViewModels\MultiValueFilterItem\IMultiValueFilterItem.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Vsto.Excel.IMultiValueFilterItem&lt;T&gt;">
+    <Position X="0.5" Y="8.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>Controls\AutoFilterDataGrid\Filter\ViewModels\MultiValueFilterItem\IMultiValueFilterItem.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Vsto.Excel.IFilterViewModel">
+    <Position X="5.75" Y="5.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAIAAAAAAAAA=</HashCode>
+      <FileName>Controls\AutoFilterDataGrid\Filter\ViewModels\IFilterViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Vsto.Excel.IMultiValueFilterViewModel">
+    <Position X="5.5" Y="7.5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAA=</HashCode>
+      <FileName>Controls\AutoFilterDataGrid\Filter\ViewModels\IMultiValueFilterViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Vsto.Excel.IFilterView" Collapsed="true">
+    <Position X="12.75" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Controls\AutoFilterDataGrid\Filter\Views\IFilterView.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Microsoft YaHei" Size="9.75" />
+</ClassDiagram>
