@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using System.Windows.Data;
 
 namespace JetSnailControlLibrary.WPF
 {
@@ -30,7 +31,17 @@ namespace JetSnailControlLibrary.WPF
             if (distinctValues.Count() <= 1) return;
 
             // generate filter item
-            foreach (var value in distinctValues) mItemsSource.Add(new MultiValueFilterItem<T>((T) value));
+            foreach (var value in distinctValues) _mItemsSourceBackup.Add(new MultiValueFilterItem<T>((T) value));
+
+            var view = CollectionViewSource.GetDefaultView(_mItemsSourceBackup) as CollectionView;
+            view.Filter = obj =>
+            {
+                if (string.IsNullOrEmpty(_keyword))
+                    return true;
+
+                return ((MultiValueFilterItem<T>) obj).Value.ToString()
+                       .Contains(_keyword);
+            };
         }
 
         #endregion
@@ -47,13 +58,12 @@ namespace JetSnailControlLibrary.WPF
 
         #endregion
 
-
         #region Private Properties
 
         /// <summary>
         ///     A collection used to generate the content for <see cref="MultiValueFilterView" /> control.
         /// </summary>
-        private readonly ObservableCollection<MultiValueFilterItem<T>> mItemsSource =
+        private readonly ObservableCollection<MultiValueFilterItem<T>> _mItemsSourceBackup =
             new ObservableCollection<MultiValueFilterItem<T>>();
 
         /// <summary>
@@ -67,6 +77,11 @@ namespace JetSnailControlLibrary.WPF
         /// </summary>
         private readonly EqualBaseFilterEx<T> _mEqualBaseFilterEx;
 
+        /// <summary>
+        ///     The keyword to further filter items of this filter.
+        /// </summary>
+        private string _keyword;
+
         #endregion
 
         #region Method
@@ -78,9 +93,9 @@ namespace JetSnailControlLibrary.WPF
         {
             if (mPrevious.Count == 0) return;
 
-            mItemsSource.Clear();
+            _mItemsSourceBackup.Clear();
             foreach (var item in mPrevious)
-                mItemsSource.Add(new MultiValueFilterItem<T>(item.Value) {IsSelected = item.IsSelected});
+                _mItemsSourceBackup.Add(new MultiValueFilterItem<T>(item.Value) {IsSelected = item.IsSelected});
         }
 
         /// <summary>
@@ -90,7 +105,7 @@ namespace JetSnailControlLibrary.WPF
         {
             mPrevious.Clear();
 
-            foreach (var item in mItemsSource)
+            foreach (var item in _mItemsSourceBackup)
                 mPrevious.Add(new MultiValueFilterItem<T>(item.Value) {IsSelected = item.IsSelected});
         }
 
@@ -101,7 +116,7 @@ namespace JetSnailControlLibrary.WPF
         {
             _mEqualBaseFilterEx.Patterns.Clear();
 
-            foreach (var item in mItemsSource)
+            foreach (var item in _mItemsSourceBackup)
                 if (item.IsSelected)
                     _mEqualBaseFilterEx.Patterns.Add(item.Value);
 
@@ -113,7 +128,7 @@ namespace JetSnailControlLibrary.WPF
         /// </summary>
         public void Clear()
         {
-            foreach (var item in mItemsSource)
+            foreach (var item in _mItemsSourceBackup)
                 item.IsSelected = false;
         }
 
@@ -130,7 +145,20 @@ namespace JetSnailControlLibrary.WPF
         /// <summary>
         ///     A collection used to generate the content for <see cref="MultiValueFilterView" /> control.
         /// </summary>
-        public IEnumerable ItemsSource => mItemsSource;
+        public IEnumerable ItemsSource => _mItemsSourceBackup;
+
+        /// <summary>
+        ///     sets the keyword for further filter and refresh the view of this filter.
+        /// </summary>
+        public string Keyword
+        {
+            set
+            {
+                _keyword = value;
+                CollectionViewSource.GetDefaultView(_mItemsSourceBackup).Refresh();
+            }
+            get => _keyword;
+        }
 
         #endregion
     }

@@ -1258,17 +1258,14 @@
     </Style.Triggers>
   </Style>
   <!---->
-  <!--Merged from file 12-DataGrid.txaml-->
+  <!--Merged from file 12-DataGrid.xaml-->
   <!-- String Filter View -->
   <Style TargetType="{x:Type local:StringFilterView}">
     <Setter Property="Template">
       <Setter.Value>
         <ControlTemplate TargetType="{x:Type local:StringFilterView}">
           <Grid Margin="0 5 0 5">
-            <Border BorderThickness="1" BorderBrush="#FFABADB3" />
-            <ScrollViewer CanContentScroll="true" VerticalScrollBarVisibility="Auto" Width="Auto">
-              <TextBox x:Name="PART_Input" Margin="{TemplateBinding Padding}" KeyboardNavigation.DirectionalNavigation="Cycle" Width="Auto" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
-            </ScrollViewer>
+            <TextBox x:Name="PART_Input" Height="Auto" KeyboardNavigation.DirectionalNavigation="Cycle" Width="Auto" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
           </Grid>
         </ControlTemplate>
       </Setter.Value>
@@ -1276,25 +1273,33 @@
   </Style>
   <!-- MultiValue Filter DataTemplate -->
   <DataTemplate x:Key="MultiValueFilterDataTemplate">
-    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Height="Auto">
       <Grid.ColumnDefinitions>
         <ColumnDefinition Width="Auto" />
         <ColumnDefinition Width="*" />
       </Grid.ColumnDefinitions>
-      <CheckBox IsChecked="{Binding IsSelected, Mode=TwoWay, PresentationTraceSources.TraceLevel=High, UpdateSourceTrigger=PropertyChanged}" />
+      <CheckBox VerticalAlignment="Center" IsChecked="{Binding IsSelected, Mode=TwoWay, PresentationTraceSources.TraceLevel=High, UpdateSourceTrigger=PropertyChanged}" />
       <TextBlock Grid.Column="1" VerticalAlignment="Center" Text="{Binding Value}" />
     </Grid>
   </DataTemplate>
+  <Style TargetType="ListBoxItem" x:Key="ListBoxItemContainerStyle">
+    <Setter Property="Height" Value="Auto" />
+    <Setter Property="Padding" Value="0" />
+  </Style>
   <!-- MultiValue Filter View -->
   <Style TargetType="{x:Type local:MultiValueFilterView}">
     <Setter Property="Template">
       <Setter.Value>
         <ControlTemplate TargetType="{x:Type local:MultiValueFilterView}">
-          <Border Margin="0 5 0 5">
-            <ScrollViewer CanContentScroll="true" VerticalScrollBarVisibility="Auto" Width="Auto">
-              <ListBox x:Name="PART_ItemsHost" ItemTemplate="{StaticResource MultiValueFilterDataTemplate}" ItemsSource="{Binding ItemsSource}" Margin="{TemplateBinding Padding}" KeyboardNavigation.DirectionalNavigation="Cycle" Width="Auto" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
-            </ScrollViewer>
-          </Border>
+          <Grid Margin="0 5">
+            <Grid.RowDefinitions>
+              <RowDefinition Height="*" />
+              <RowDefinition Height="5" />
+              <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <ListBox x:Name="PART_ItemsHost" MaxHeight="200" Padding="0" ItemTemplate="{StaticResource MultiValueFilterDataTemplate}" ItemContainerStyle="{StaticResource ListBoxItemContainerStyle}" ItemsSource="{Binding ItemsSource}" Margin="{TemplateBinding Padding}" KeyboardNavigation.DirectionalNavigation="Cycle" Width="Auto" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+            <TextBox x:Name="PART_Input" Grid.Row="2" Height="Auto" Width="Auto" Text="{Binding Keyword, UpdateSourceTrigger=PropertyChanged, Delay=500}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+          </Grid>
         </ControlTemplate>
       </Setter.Value>
     </Setter>

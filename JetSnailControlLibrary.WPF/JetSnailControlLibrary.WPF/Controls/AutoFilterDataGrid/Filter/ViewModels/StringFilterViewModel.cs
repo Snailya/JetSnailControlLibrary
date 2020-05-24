@@ -70,7 +70,6 @@ namespace JetSnailControlLibrary.WPF
 
         #endregion
 
-
         #region Public Properties
 
         /// <summary>

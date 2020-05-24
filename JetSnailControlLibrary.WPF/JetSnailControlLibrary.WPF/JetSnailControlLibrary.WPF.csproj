@@ -131,7 +131,10 @@
     <None Include="XamlResources_Application\2\09-ListBox.txaml" />
     <None Include="XamlResources_Application\2\09-TabControl.txaml" />
     <None Include="XamlResources_Application\2\11-TreeView.txaml" />
-    <None Include="XamlResources_Application\2\12-DataGrid.txaml" />
+    <Page Include="XamlResources_Application\2\12-DataGrid.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <None Include="XamlResources_CustomControls\1\01-RippleEffectDecorator.txaml" />
     <None Include="XamlResources_CustomControls\1\02-AutoFilterDataGrid.txaml" />
   </ItemGroup>

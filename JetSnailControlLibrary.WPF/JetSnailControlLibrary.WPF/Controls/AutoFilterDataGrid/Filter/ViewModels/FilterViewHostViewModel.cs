@@ -75,9 +75,9 @@ namespace JetSnailControlLibrary.WPF
             // Add multivalue filter view
             Views = new List<IFilterView> {new MultiValueFilterView(fieldInfo, itemsSource)};
 
-            // Add string filter view if it's of type string
-            if (fieldInfo.PropertyType == typeof(string))
-                Views.Add(new StringFilterView(fieldInfo, string.Empty));
+            //// Add string filter view if it's of type string
+            //if (fieldInfo.PropertyType == typeof(string))
+            //    Views.Add(new StringFilterView(fieldInfo, string.Empty));
         }
 
         /// <summary>
