@@ -72,7 +72,7 @@
     <Compile Include="Controls\AutoFilterDataGrid\Filter\Expression\IMultiValueFilterEx.cs" />
     <Compile Include="Controls\AutoFilterDataGrid\Filter\Expression\StringBaseFilterEx.cs" />
     <Compile Include="Controls\AutoFilterDataGrid\Filter\FilterViewHost.cs" />
-    <Compile Include="Controls\AutoFilterDataGrid\Filter\ViewModels\FilterViewHostViewModel.cs" />
+    <Compile Include="Controls\AutoFilterDataGrid\Filter\ViewModels\FilterPaneViewModel.cs" />
     <Compile Include="Controls\AutoFilterDataGrid\Filter\ViewModels\IFilterViewModel.cs" />
     <Compile Include="Controls\AutoFilterDataGrid\Filter\ViewModels\IMultiValueFilterViewModel.cs" />
     <Compile Include="Controls\AutoFilterDataGrid\Filter\ViewModels\IStringFilterViewModel.cs" />

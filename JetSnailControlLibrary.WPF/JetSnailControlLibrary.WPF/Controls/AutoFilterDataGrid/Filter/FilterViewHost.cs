@@ -17,7 +17,7 @@ namespace JetSnailControlLibrary.WPF
             base.OnApplyTemplate();
 
             // Set Binding
-            ItemsSource = (DataContext as FilterViewHostViewModel)?.Views;
+            ItemsSource = (DataContext as FilterPaneViewModel)?.Views;
         }
 
         #region Constructor

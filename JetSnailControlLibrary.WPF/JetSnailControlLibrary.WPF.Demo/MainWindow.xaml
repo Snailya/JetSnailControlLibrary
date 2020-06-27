@@ -26,7 +26,18 @@
             </TreeView>
         </TabItem>
         <TabItem Header="DataGrid">
-            <wpf:AutoFilterDataGrid ItemsSource="{x:Static local:DataGridData.Instance}" IsReadOnly="False">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <StackPanel>
+                    <Button Content="Re-generate by new instance" Click="ButtonBase1_OnClick"></Button>
+                    <Button Content="Re-generate by clear and add" Click="ButtonBase2_OnClick"></Button>
+                </StackPanel>
+                <wpf:AutoFilterDataGrid Grid.Row="1" x:Name="AutoFilterDataGrid"
+                                        d:DataContext="{x:Static local:DataGridData.Instance}"
+                                        ItemsSource="{Binding}" IsReadOnly="True">
                 <wpf:AutoFilterDataGrid.Columns>
                     <DataGridTemplateColumn>
                         <DataGridTemplateColumn.CellTemplate>
@@ -37,6 +48,8 @@
                     </DataGridTemplateColumn>
                 </wpf:AutoFilterDataGrid.Columns>
             </wpf:AutoFilterDataGrid>
+            </Grid>
+
         </TabItem>
         <TabItem Header="ListBox">
             <StackPanel>

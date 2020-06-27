@@ -10,16 +10,16 @@ namespace JetSnailControlLibrary.WPF
     /// <summary>
     ///     Represents an view model for FilterViewHost binding.
     /// </summary>
-    public class FilterViewHostViewModel
+    public class FilterPaneViewModel
     {
         #region Constructor
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="FilterViewHostViewModel" /> class.
+        ///     Initializes a new instance of the <see cref="FilterPaneViewModel" /> class.
         /// </summary>
         /// <param name="fieldInfo"></param>
         /// <param name="itemsSource"></param>
-        public FilterViewHostViewModel(PropertyInfo fieldInfo, IEnumerable itemsSource)
+        public FilterPaneViewModel(PropertyInfo fieldInfo, IEnumerable itemsSource)
         {
             // Binding commands
             ApplyFilterCommand = new RelayCommand(param => ApplyFilterCommandExecute());
@@ -43,9 +43,9 @@ namespace JetSnailControlLibrary.WPF
         #region Event
 
         /// <summary>
-        ///     Declare an property changed event when filter view host's viewmodel changed.
+        ///     Notify when new filter expressions are applied.
         /// </summary>
-        public event EventHandler FilterViewHostViewModelChanged = (sender, e) => { };
+        public event EventHandler FilterApplied = (sender, e) => { };
 
         #endregion
 
@@ -86,7 +86,7 @@ namespace JetSnailControlLibrary.WPF
         public void ApplyFilterCommandExecute()
         {
             foreach (var view in Views) view.ViewModel.Apply();
-            FilterViewHostViewModelChanged(this, EventArgs.Empty);
+            FilterApplied(this, EventArgs.Empty);
         }
 
         /// <summary>

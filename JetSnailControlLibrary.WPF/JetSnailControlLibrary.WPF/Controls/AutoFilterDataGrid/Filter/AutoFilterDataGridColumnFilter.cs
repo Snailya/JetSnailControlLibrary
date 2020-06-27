@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
@@ -31,53 +32,67 @@ namespace JetSnailControlLibrary.WPF
         #region Method
 
         /// <summary>
-        ///     When overridden in a derived class, is invoked whenever application code or internal processes (such as a
-        ///     rebuilding layout pass) call <see cref="M:System.Windows.Controls.Control.ApplyTemplate" />.
+        ///     This method raises whenever DataGrid's ItemsSource is reset. Re-generate view model for filter pane when this
+        ///     raises.
         /// </summary>
         public override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
 
-            // Get DataGrid to apply filterEx later
-            mDataGrid = VisualHelper.TryFindParent<AutoFilterDataGrid>(this);
+            #region Get Elements
 
-            // Get template parts
-            mPopup = GetTemplateChild(PartPopup) as Popup;
-            if (mPopup == null) return;
+            // Get DataGrid to apply filterEx later
+            _dataGrid = VisualHelper.TryFindParent<AutoFilterDataGrid>(this);
+            _dataGridColumnHeader = VisualHelper.TryFindParent<DataGridColumnHeader>(this);
+            _filterPane = GetTemplateChild(PartPopup) as Popup;
+
+            if (_filterPane == null) return;
 
             // Get binding path
             var bindingPath = string.Empty;
-            var columnHeader = VisualHelper.TryFindParent<DataGridColumnHeader>(this);
-            if (!(columnHeader?.Column is DataGridBoundColumn boundColumn)) return;
+            if (!(_dataGridColumnHeader?.Column is DataGridBoundColumn boundColumn)) return;
             if (boundColumn.Binding is Binding binding) bindingPath = binding.Path.Path;
             if (string.IsNullOrEmpty(bindingPath) || bindingPath.Contains(".")) return;
 
             // Get PropertyInfo of the binding
-            mDataGridItemsSource = VisualHelper.TryFindParent<DataGrid>(columnHeader).ItemsSource;
-            mFieldInfo = mDataGridItemsSource.GetType().GetGenericArguments()[0].GetProperty(bindingPath);
+            _columnInfo = _dataGrid.ItemsSource.GetType().GetGenericArguments()[0].GetProperty(bindingPath);
+            if (_columnInfo == null) return;
 
-            // XXX: currently only show filter if it is of type string or nothing to filter
-            if (mFieldInfo.PropertyType != typeof(string))
-            {
-                Visibility = Visibility.Hidden;
-                return;
-            }
+            #endregion
 
-            // Create viewmodel and set bindings
-            mViewModel = new FilterViewHostViewModel(mFieldInfo, mDataGridItemsSource);
-            
-            mViewModel.FilterViewHostViewModelChanged += OnFilterViewHostViewModelChanged;
-            mPopup.DataContext = mViewModel;
-            mPopup.Opened += OnOpened;
-            mPopup.Closed += OnClosed;
+            // clear all applied filters because we are going to re-generate viewmodel for filter pane
+            var view = CollectionViewSource.GetDefaultView(_dataGrid.ItemsSource);
+            _dataGrid.AppliedFilterExpressions.Clear();
+            view.Filter = null;
+
+            InitializeFilterPaneViewModel();
+            _filterPane.Opened += OnFilterPaneOpened;
+            _filterPane.Closed += OnFilterPaneClosed;
         }
 
-        private PropertyInfo mFieldInfo;
 
-        private void OnFilterViewHostViewModelChanged(object sender, EventArgs e)
+        private void InitializeFilterPaneViewModel()
         {
-            if (!mDataGrid.FilterExes.ContainsKey(mFieldInfo.Name))
-                mDataGrid.FilterExes.Add(mFieldInfo.Name, mViewModel.Views.Select(v => v.ViewModel.FilterEx).ToList());
+            UpdateFilterPaneViewModel(_dataGrid.ItemsSource);
+        }
+
+        private void UpdateFilterPaneViewModel(IEnumerable source)
+        {
+            var viewModel = new FilterPaneViewModel(_columnInfo, source);
+            viewModel.FilterApplied += OnFilterApplied;
+            _filterPane.DataContext = viewModel;
+        }
+
+        /// <summary>
+        ///     Actions taking on filter expression applied.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnFilterApplied(object sender, EventArgs e)
+        {
+            if (!_dataGrid.AppliedFilterExpressions.ContainsKey(_columnInfo.Name))
+                _dataGrid.AppliedFilterExpressions.Add(_columnInfo.Name,
+                    ((FilterPaneViewModel) _filterPane.DataContext).Views.Select(v => v.ViewModel.FilterEx).ToList());
 
             RefreshView();
         }
@@ -85,22 +100,25 @@ namespace JetSnailControlLibrary.WPF
         private void RefreshView()
         {
             // Get the view
-            var view = CollectionViewSource.GetDefaultView(mDataGrid.ItemsSource);
-            if (view != null)
-                // Create a filter
-                view.Filter = delegate(object item)
-                {
-                    // Show the current object
-                    var result = true;
+            var view = CollectionViewSource.GetDefaultView(_dataGrid.ItemsSource);
+            if (view == null) return;
 
-                    // Loop filters
-                    foreach (var columnFilterExes in mDataGrid.FilterExes.Where(columnFilterExes =>
-                        columnFilterExes.Value.ToList().Any(filterEx => !filterEx.IsMatch(item))))
-                        result = false;
+            // Create a filter
+            view.Filter = delegate(object item)
+            {
+                // Show the current object
+                var result = true;
 
-                    // Return if it's visible or not
-                    return result;
-                };
+                // Loop filters
+                foreach (var columnFilterExes in _dataGrid.AppliedFilterExpressions.Where(columnFilterExes =>
+                    columnFilterExes.Value.ToList().Any(filterEx => !filterEx.IsMatch(item))))
+                    result = false;
+
+                // Return if it's visible or not
+                return result;
+            };
+
+            _dataGrid.PreviousFilter = view.Filter;
         }
 
         /// <summary>
@@ -108,9 +126,9 @@ namespace JetSnailControlLibrary.WPF
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void OnOpened(object sender, EventArgs e)
+        private void OnFilterPaneOpened(object sender, EventArgs e)
         {
-            foreach (var view in mViewModel.Views) view.ViewModel.Cache();
+            foreach (var view in ((FilterPaneViewModel) _filterPane.DataContext).Views) view.ViewModel.Cache();
         }
 
         /// <summary>
@@ -118,9 +136,10 @@ namespace JetSnailControlLibrary.WPF
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        protected void OnClosed(object sender, EventArgs e)
+        protected void OnFilterPaneClosed(object sender, EventArgs e)
         {
-            foreach (var view in mViewModel.Views) view.ViewModel.Cancel();
+            if (_filterPane.DataContext == null) return;
+            foreach (var view in ((FilterPaneViewModel) _filterPane.DataContext).Views) view.ViewModel.Cancel();
         }
 
         #endregion
@@ -129,10 +148,12 @@ namespace JetSnailControlLibrary.WPF
 
         internal const string PartPopup = "PART_Popup";
 
-        private IEnumerable mDataGridItemsSource;
-        private Popup mPopup;
-        private AutoFilterDataGrid mDataGrid;
-        private FilterViewHostViewModel mViewModel;
+        private AutoFilterDataGrid _dataGrid;
+        private DataGridColumnHeader _dataGridColumnHeader;
+        private Popup _filterPane;
+
+        private PropertyInfo _columnInfo;
+        private List<dynamic> _source;
 
         #endregion
     }

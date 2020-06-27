@@ -36,6 +36,28 @@ namespace JetSnailControlLibrary.WPF.Demo
             
         }
 
+        public static void GenerateNewData()
+        {
+            Instance.Clear();
+
+            for (var i = 0; i < 7; i++)
+                Instance.Add(new DataViewModel
+                {
+                    Name = "阀门",
+                    Material = "DN15",
+                    ShortBrand = "KBS",
+                    Price = 12
+                });
+            for (var i = 0; i < 3; i++)
+                Instance.Add(new DataViewModel
+                {
+                    Name = "离心泵",
+                    Model = "SBS 100-250-125",
+                    Material = "SUS304",
+                    ShortBrand = "KSB"
+                });
+        }
+
         public static ObservableCollection<DataViewModel> Instance { set; get; }
     }
 

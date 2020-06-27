@@ -34,7 +34,7 @@
                 IsChecked="{Binding IsSelected, Mode=TwoWay, PresentationTraceSources.TraceLevel=High, UpdateSourceTrigger=PropertyChanged}" />
             <TextBlock Grid.Column="1"
                        VerticalAlignment="Center"
-                       Text="{Binding Value}" />
+                       Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}" />
         </Grid>
     </DataTemplate>
 
