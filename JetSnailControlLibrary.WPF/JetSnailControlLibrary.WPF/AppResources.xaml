@@ -1130,7 +1130,7 @@
   </Style>
   <Style TargetType="{x:Type TreeViewItem}">
     <Setter Property="Foreground" Value="{Binding Path=Foreground, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" />
-    <Setter Property="Padding" Value="16" />
+    <Setter Property="Padding" Value="16 0" />
     <Setter Property="KeyboardNavigation.AcceptsReturn" Value="True" />
     <Setter Property="TextBlock.FontWeight" Value="{DynamicResource Subtitle1.FontWeight}" />
     <Setter Property="Template">
@@ -1172,7 +1172,7 @@
                       <ColumnDefinition Width="16" />
                       <ColumnDefinition Width="24" />
                     </Grid.ColumnDefinitions>
-                    <ToggleButton x:Name="Expander" Grid.Column="0" Grid.ColumnSpan="5" Style="{StaticResource AngleToggleStyle}" IsChecked="{Binding Path=IsExpanded, RelativeSource={RelativeSource TemplatedParent}}" ClickMode="Press" />
+                    <ToggleButton x:Name="Expander" Grid.Column="0" Style="{StaticResource AngleToggleStyle}" IsChecked="{Binding Path=IsExpanded, RelativeSource={RelativeSource TemplatedParent}}" ClickMode="Press" />
                     <ContentPresenter x:Name="PART_Header" Grid.Column="2" IsHitTestVisible="False" ContentSource="Header" HorizontalAlignment="Stretch" />
                     <TextBlock x:Name="PART_Counter" Grid.Column="4" IsHitTestVisible="False" Foreground="{StaticResource OnSurfaceBrush}" FontSize="{StaticResource Caption.FontSize}" FontWeight="{StaticResource Caption.FontWeight}" Text="{Binding ItemsSource.Count, RelativeSource={RelativeSource TemplatedParent}, Converter={local:ZeroToEmptyStringConverter}}" />
                   </Grid>

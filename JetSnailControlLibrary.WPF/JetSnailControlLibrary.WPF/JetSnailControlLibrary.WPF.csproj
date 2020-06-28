@@ -130,7 +130,10 @@
     <None Include="XamlResources_Application\2\09-ComboBox.txaml" />
     <None Include="XamlResources_Application\2\09-ListBox.txaml" />
     <None Include="XamlResources_Application\2\09-TabControl.txaml" />
-    <None Include="XamlResources_Application\2\11-TreeView.txaml" />
+    <None Include="XamlResources_Application\2\11-TreeView.txaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </None>
     <Page Include="XamlResources_Application\2\12-DataGrid.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
