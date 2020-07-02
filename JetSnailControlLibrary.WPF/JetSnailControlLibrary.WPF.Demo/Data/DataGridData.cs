@@ -1,12 +1,31 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections;
+using System.Collections.ObjectModel;
 
 namespace JetSnailControlLibrary.WPF.Demo
 {
     public class DataGridData
     {
+        public IList CurrentSelections;
+
         static DataGridData()
         {
             Instance = new ObservableCollection<DataViewModel>();
+            Instance.Add(new DataViewModel()
+            {
+                Name = "球阀",
+                Parameter = "DN15"
+            });
+            Instance.Add(new DataViewModel()
+            {
+                Name = "球阀",
+                Parameter = "DN150"
+            });
+            Instance.Add(new DataViewModel()
+            {
+                Name = "球阀",
+                Parameter = "DN25"
+            });
+
             for (var i = 0; i < 3; i++)
                 Instance.Add(new DataViewModel
                 {
@@ -32,8 +51,6 @@ namespace JetSnailControlLibrary.WPF.Demo
                     Material = "SUS304",
                     ShortBrand = "KSB"
                 });
-
-            
         }
 
         public static void GenerateNewData()

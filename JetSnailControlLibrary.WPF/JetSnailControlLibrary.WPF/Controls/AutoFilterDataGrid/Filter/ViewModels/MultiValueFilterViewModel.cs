@@ -23,15 +23,20 @@ namespace JetSnailControlLibrary.WPF
         /// <param name="itemsSource"></param>
         public MultiValueFilterViewModel(PropertyInfo fieldInfo, IEnumerable itemsSource)
         {
+            if (fieldInfo.PropertyType != typeof(string)) return;
+
             // Set filter expression
             _mEqualBaseFilterEx = new EqualBaseFilterEx<T>(fieldInfo);
 
             // set itemsSource
-            var distinctValues = itemsSource.Cast<dynamic>().Select(i => fieldInfo.GetValue(i, null)).Distinct();
+            var distinctValues = itemsSource.Cast<dynamic>().Select(i => fieldInfo.GetValue(i, null)).Distinct().ToList();
             if (distinctValues.Count() <= 1) return;
-
+            
+            // sort values
+            var sortedValues = distinctValues.OrderBy(s => s as string,
+                new NaturalComparer(NaturalComparerOptions.RomanNumbers));
             // generate filter item
-            foreach (var value in distinctValues) _mItemsSourceBackup.Add(new MultiValueFilterItem<T>((T) value));
+            foreach (var value in sortedValues) _mItemsSourceBackup.Add(new MultiValueFilterItem<T>((T) value));
 
             var view = CollectionViewSource.GetDefaultView(_mItemsSourceBackup) as CollectionView;
             view.Filter = obj =>

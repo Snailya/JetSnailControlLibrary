@@ -99,6 +99,11 @@
               <local:FilterViewHost />
             </Popup>
           </Grid>
+          <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+              <Setter TargetName="PART_Filter" Property="Cursor" Value="Hand" />
+            </Trigger>
+          </ControlTemplate.Triggers>
         </ControlTemplate>
       </Setter.Value>
     </Setter>

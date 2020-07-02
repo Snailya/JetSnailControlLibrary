@@ -60,6 +60,9 @@ namespace JetSnailControlLibrary.WPF
 
             #endregion
 
+            // clear all previous sort
+            _dataGrid.SortedColumns.Clear();
+
             // clear all applied filters because we are going to re-generate viewmodel for filter pane
             var view = CollectionViewSource.GetDefaultView(_dataGrid.ItemsSource);
             _dataGrid.AppliedFilterExpressions.Clear();
@@ -128,6 +131,7 @@ namespace JetSnailControlLibrary.WPF
         /// <param name="e"></param>
         private void OnFilterPaneOpened(object sender, EventArgs e)
         {
+            _dataGrid.IsFiltering = true;
             foreach (var view in ((FilterPaneViewModel) _filterPane.DataContext).Views) view.ViewModel.Cache();
         }
 
@@ -140,6 +144,7 @@ namespace JetSnailControlLibrary.WPF
         {
             if (_filterPane.DataContext == null) return;
             foreach (var view in ((FilterPaneViewModel) _filterPane.DataContext).Views) view.ViewModel.Cancel();
+            _dataGrid.IsFiltering = false;
         }
 
         #endregion

@@ -70,12 +70,12 @@
                     <Border x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"
                             Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
-                        <ScrollViewer Focusable="false" Margin="{TemplateBinding Padding}">
+                        <ScrollViewer x:Name="Sv" Focusable="false" Margin="{TemplateBinding Padding}">
                             <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
                         </ScrollViewer>
                     </Border>
                     <ControlTemplate.Triggers>
-                        <MultiTrigger>
+                      <MultiTrigger>
                             <MultiTrigger.Conditions>
                                 <Condition Property="IsGrouping" Value="true" />
                                 <Condition Property="VirtualizingPanel.IsVirtualizingWhenGrouping" Value="false" />

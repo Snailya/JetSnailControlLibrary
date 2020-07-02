@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿
+using System.Linq;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 
@@ -6,6 +8,46 @@ namespace JetSnailControlLibrary.WPF
 {
     public class ControlProperties
     {
+        #region AllowNaturalSortProperty
+
+        public static readonly DependencyProperty UseNaturalSortProperty =
+            DependencyProperty.RegisterAttached("UseNaturalSort", typeof(bool), typeof(ControlProperties),
+                new PropertyMetadata(default(bool), OnUseNaturalSortPropertyChanged));
+
+        public static bool GetUseNaturalSort(DependencyObject element)
+        {
+            return (bool) element.GetValue(UseNaturalSortProperty);
+        }
+
+        public static void SetUseNaturalSort(DependencyObject element, bool value)
+        {
+            element.SetValue(UseNaturalSortProperty, value);
+        }
+
+        private static void OnUseNaturalSortPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if ((bool) e.NewValue == false)
+                return;
+
+            if (!(d is DataGrid dataGrid)) return;
+            
+            dataGrid.Sorting -= HandleNaturalSorting;
+            dataGrid.Sorting += HandleNaturalSorting;
+        }
+
+        private static void HandleNaturalSorting(object sender, DataGridSortingEventArgs e)
+        {
+            var dataGrid = (AutoFilterDataGrid) sender;
+
+            var listCollectionView = (ListCollectionView) CollectionViewSource.GetDefaultView(dataGrid.ItemsSource);
+
+            listCollectionView.CustomSort = new DataGridColumnNaturalComparer(dataGrid.SortedColumns);
+
+            e.Handled = true;
+        }
+
+        #endregion
+
         #region IsBusyProperty
 
         /// <summary>
@@ -52,7 +94,6 @@ namespace JetSnailControlLibrary.WPF
         /// <param name="e"></param>
         private static void OnGroupByPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-
             // Make sure it is a list box
             if (!(d is ListBox listBox)) return;
 
@@ -61,7 +102,7 @@ namespace JetSnailControlLibrary.WPF
 
             myView.GroupDescriptions.Clear();
 
-            if (string.IsNullOrEmpty((string)e.NewValue)) return;
+            if (string.IsNullOrEmpty((string) e.NewValue)) return;
 
             if (!myView.CanGroup) return;
             var groupDescription

@@ -28,26 +28,28 @@
         <TabItem Header="DataGrid">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <StackPanel>
-                    <Button Content="Re-generate by new instance" Click="ButtonBase1_OnClick"></Button>
-                    <Button Content="Re-generate by clear and add" Click="ButtonBase2_OnClick"></Button>
+                    <Button Content="Re-generate by new instance" Click="ButtonBase1_OnClick" />
+                    <Button Content="Re-generate by clear and add" Click="ButtonBase2_OnClick" />
+                    <TextBlock Text="{Binding SelectedItem,ElementName=AutoFilterDataGrid}" />
                 </StackPanel>
                 <wpf:AutoFilterDataGrid Grid.Row="1" x:Name="AutoFilterDataGrid"
                                         d:DataContext="{x:Static local:DataGridData.Instance}"
+                                        SelectionMode="Single"
                                         ItemsSource="{Binding}" IsReadOnly="True">
-                <wpf:AutoFilterDataGrid.Columns>
-                    <DataGridTemplateColumn>
-                        <DataGridTemplateColumn.CellTemplate>
-                            <ItemContainerTemplate>
-                                <Button Style="{StaticResource DataGridCellButton}" Content="&#xF00D;" />
-                            </ItemContainerTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                </wpf:AutoFilterDataGrid.Columns>
-            </wpf:AutoFilterDataGrid>
+                    <wpf:AutoFilterDataGrid.Columns>
+                        <DataGridTemplateColumn>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <ItemContainerTemplate>
+                                    <Button Style="{StaticResource DataGridCellButton}" Content="&#xF00D;" />
+                                </ItemContainerTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </wpf:AutoFilterDataGrid.Columns>
+                </wpf:AutoFilterDataGrid>
             </Grid>
 
         </TabItem>
