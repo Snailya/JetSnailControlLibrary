@@ -158,7 +158,6 @@ namespace JetSnailControlLibrary.WPF
         private Popup _filterPane;
 
         private PropertyInfo _columnInfo;
-        private List<dynamic> _source;
 
         #endregion
     }

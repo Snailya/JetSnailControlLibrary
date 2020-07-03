@@ -1,6 +1,4 @@
-﻿
-using System.Linq;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 
@@ -10,31 +8,54 @@ namespace JetSnailControlLibrary.WPF
     {
         #region AllowNaturalSortProperty
 
+        /// <summary>
+        ///     The AttachedProperty for the UseNaturalSort property.
+        /// </summary>
         public static readonly DependencyProperty UseNaturalSortProperty =
             DependencyProperty.RegisterAttached("UseNaturalSort", typeof(bool), typeof(ControlProperties),
                 new PropertyMetadata(default(bool), OnUseNaturalSortPropertyChanged));
 
+        /// <summary>
+        ///     UseNaturalSort property getter.
+        /// </summary>
+        /// <param name="element"></param>
+        /// <returns></returns>
         public static bool GetUseNaturalSort(DependencyObject element)
         {
             return (bool) element.GetValue(UseNaturalSortProperty);
         }
 
+        /// <summary>
+        ///     UseNaturalSort property setter.
+        /// </summary>
+        /// <param name="element"></param>
+        /// <param name="value"></param>
         public static void SetUseNaturalSort(DependencyObject element, bool value)
         {
             element.SetValue(UseNaturalSortProperty, value);
         }
 
+        /// <summary>
+        ///     Add a natural sorting handle for DataGrid if OnUseNaturalSort is set to true.
+        /// </summary>
+        /// <param name="d"></param>
+        /// <param name="e"></param>
         private static void OnUseNaturalSortPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if ((bool) e.NewValue == false)
                 return;
 
             if (!(d is DataGrid dataGrid)) return;
-            
+
             dataGrid.Sorting -= HandleNaturalSorting;
             dataGrid.Sorting += HandleNaturalSorting;
         }
 
+        /// <summary>
+        ///     Create an IComparer for multi DataGrid columns and assign to CustomSort property of DataGrid.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private static void HandleNaturalSorting(object sender, DataGridSortingEventArgs e)
         {
             var dataGrid = (AutoFilterDataGrid) sender;

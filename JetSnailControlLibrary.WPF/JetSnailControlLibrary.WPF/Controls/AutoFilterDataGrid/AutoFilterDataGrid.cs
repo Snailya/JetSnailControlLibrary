@@ -12,7 +12,7 @@ using System.Windows.Media;
 namespace JetSnailControlLibrary.WPF
 {
     /// <summary>
-    ///     A control in data grid column header for adding filter features.
+    ///     A control in DataGrid column header for adding filter features.
     /// </summary>
     [TemplatePart(Name = "DG_Popup")]
     [TemplatePart(Name = "DG_ScrollViewer")]
@@ -76,16 +76,27 @@ namespace JetSnailControlLibrary.WPF
 
         private bool _sorted;
 
+        /// <summary>
+        ///     The DependencyProperty for the SortIndicatorColor property.
+        /// </summary>
         public static readonly DependencyProperty SortIndicatorColorProperty =
             DependencyProperty.Register("SortIndicatorColor", typeof(Color), typeof(AutoFilterDataGrid),
                 new FrameworkPropertyMetadata(Colors.Transparent));
 
+        /// <summary>
+        ///     A dependency property that represents the color used for indicate sorting order.
+        /// </summary>
         public Color SortIndicatorColor
         {
             get => (Color) GetValue(SortIndicatorColorProperty);
             set => SetValue(SortIndicatorColorProperty, value);
         }
 
+        /// <summary>
+        ///     Cache the columns on sorting, and update indicator's color.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void OnSorting(object sender, DataGridSortingEventArgs e)
         {
             var column = e.Column;
@@ -100,10 +111,16 @@ namespace JetSnailControlLibrary.WPF
             UpdateSortIndicator();
         }
 
+        /// <summary>
+        ///     Indicate sort order by opacity of SortIndicatorColor property.
+        /// </summary>
         private void UpdateSortIndicator()
         {
+            // find column headers from visual
             var columnHeaders = VisualHelper.TryFindChildren<DataGridColumnHeader>(this);
 
+            // loop headers, set header background color if it is cached in SortColumns property;
+            // set to transparent if not.
             foreach (var columnHeader in columnHeaders)
                 if (SortedColumns.Contains(columnHeader.Column))
                 {
@@ -140,9 +157,15 @@ namespace JetSnailControlLibrary.WPF
         private bool _isDragging;
         private bool _isEditing;
 
+        /// <summary>
+        ///     The DependencyProperty for the DraggedItem property.
+        /// </summary>
         public static readonly DependencyProperty DraggedItemProperty =
             DependencyProperty.Register("DraggedItem", typeof(object), typeof(AutoFilterDataGrid));
 
+        /// <summary>
+        ///     A dependency property that represents the object being dragging.
+        /// </summary>
         public object DraggedItem
         {
             get => GetValue(DraggedItemProperty);
@@ -158,7 +181,7 @@ namespace JetSnailControlLibrary.WPF
         {
             if (!_isDragging || e.LeftButton != MouseButtonState.Pressed) return;
 
-            // delete selected item from data grid
+            // delete selected item from DataGrid
             (ItemsSource as IList)?.Remove(DraggedItem);
 
             //display the popup if it hasn't been opened yet
