@@ -138,10 +138,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </None>
-    <Page Include="XamlResources_Application\2\12-DataGrid.xaml">
+    <None Include="XamlResources_Application\2\12-DataGrid.txaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
+    </None>
     <None Include="XamlResources_CustomControls\1\01-RippleEffectDecorator.txaml" />
     <None Include="XamlResources_CustomControls\1\02-AutoFilterDataGrid.txaml">
       <SubType>Designer</SubType>
