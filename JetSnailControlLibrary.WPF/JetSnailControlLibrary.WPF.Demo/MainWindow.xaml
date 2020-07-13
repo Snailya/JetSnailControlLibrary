@@ -34,11 +34,12 @@
                 <StackPanel>
                     <Button Content="Re-generate by new instance" Click="ButtonBase1_OnClick" />
                     <Button Content="Re-generate by clear and add" Click="ButtonBase2_OnClick" />
+                    <Button Content="Add Item" Click="ButtonBase3_OnClick" />
                     <TextBlock Text="{Binding SelectedItem,ElementName=AutoFilterDataGrid}" />
                 </StackPanel>
-                <wpf:AutoFilterDataGrid Grid.Row="1" x:Name="AutoFilterDataGrid"
+                <wpf:AutoFilterDataGrid Grid.Row="1" x:Name="AutoFilterDataGrid" BorderBrush="{DynamicResource BackgroundBrush}"
                                         d:DataContext="{x:Static local:DataGridData.Instance}"
-                                        SelectionMode="Single"
+                                        SelectionMode="Single"  CanUserDrag="True"
                                         ItemsSource="{Binding}" IsReadOnly="True">
                     <wpf:AutoFilterDataGrid.Columns>
                         <DataGridTemplateColumn>

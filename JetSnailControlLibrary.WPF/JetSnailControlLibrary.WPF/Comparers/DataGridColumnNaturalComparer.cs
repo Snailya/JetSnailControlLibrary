@@ -34,7 +34,7 @@ namespace JetSnailControlLibrary.WPF
 
             do
             {
-                var result = _comparer.Compare(_parser1.CurrentToken, _parser2.CurrentToken);
+                var result = _comparer.Compare(_parser1.CurrentToken?.ToString(), _parser2.CurrentToken?.ToString());
 
                 if (result != 0) return result;
 

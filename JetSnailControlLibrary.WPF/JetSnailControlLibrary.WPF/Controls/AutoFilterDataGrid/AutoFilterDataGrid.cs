@@ -2,12 +2,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Threading;
 
 namespace JetSnailControlLibrary.WPF
 {
@@ -23,8 +25,10 @@ namespace JetSnailControlLibrary.WPF
             base.OnApplyTemplate();
 
             // get popup control
-            _popup = GetTemplateChild("DG_Popup") as Popup;
+            _draggedItemIndicator = GetTemplateChild("DG_Popup") as Popup;
             _scrollViewer = GetTemplateChild("DG_ScrollViewer") as ScrollViewer;
+
+            _defaultIsReadOnlyValue = IsReadOnly;
 
             // cache the default view and add collection change event
             Source = new CollectionViewSource {Source = ItemsSource};
@@ -42,6 +46,9 @@ namespace JetSnailControlLibrary.WPF
             #endregion
 
             #region Drag and Drop
+
+            _dragTrigger.Interval = new TimeSpan(0, 0, 0, 0, 800);
+            _dragTrigger.Tick += _dragTrigger_Tick;
 
             BeginningEdit += (s1, e1) =>
             {
@@ -151,25 +158,46 @@ namespace JetSnailControlLibrary.WPF
 
         #region Drag and Drop
 
-        private Popup _popup;
+        private Popup _draggedItemIndicator;
         private ScrollViewer _scrollViewer;
+        private DataGridRow _draggingRow;
 
         private bool _isDragging;
         private bool _isEditing;
+        private bool _defaultIsReadOnlyValue;
+
+        // This event will be used for tracking if the MouseUp has been received
+        private readonly DispatcherTimer _dragTrigger = new DispatcherTimer();
+
+        /// <summary>
+        ///     The DependencyProperty for the CanUserDrag property.
+        /// </summary>
+        public static readonly DependencyProperty CanUserDragProperty =
+            DependencyProperty.Register("CanUserDrag", typeof(bool), typeof(AutoFilterDataGrid),
+                new FrameworkPropertyMetadata(true));
+
+        /// <summary>
+        ///     A dependency property that represents whether user can drag and drop row.
+        /// </summary>
+        public bool CanUserDrag
+        {
+            get => (bool) GetValue(CanUserDragProperty);
+            set => SetValue(CanUserDragProperty, value);
+        }
 
         /// <summary>
         ///     The DependencyProperty for the DraggedItem property.
         /// </summary>
-        public static readonly DependencyProperty DraggedItemProperty =
-            DependencyProperty.Register("DraggedItem", typeof(object), typeof(AutoFilterDataGrid));
+        public static readonly DependencyProperty DraggingItemProperty =
+            DependencyProperty.Register("DraggingItem", typeof(object), typeof(AutoFilterDataGrid));
 
         /// <summary>
         ///     A dependency property that represents the object being dragging.
         /// </summary>
-        public object DraggedItem
+        public object DraggingItem
         {
-            get => GetValue(DraggedItemProperty);
-            set => SetValue(DraggedItemProperty, value);
+            get => GetValue(DraggingItemProperty);
+            set => SetValue(DraggingItemProperty, value);
         }
 
         /// <summary>
@@ -179,35 +207,26 @@ namespace JetSnailControlLibrary.WPF
         /// <param name="e"></param>
         private void OnMouseMove(object sender, MouseEventArgs e)
         {
-            if (!_isDragging || e.LeftButton != MouseButtonState.Pressed) return;
+            // prevent if CanUserDrag is false
+            if (!CanUserDrag) return;
 
-            // delete selected item from DataGrid
-            (ItemsSource as IList)?.Remove(DraggedItem);
+            // only if DraggedItem exist and left button of mouse is pressed while moving, treat it as drag event
+            if (_draggingRow == null || e.LeftButton != MouseButtonState.Pressed) return;
 
-            //display the popup if it hasn't been opened yet
-            if (!_popup.IsOpen)
-            {
-                //switch to read-only mode
-                IsReadOnly = true;
 
-                //make sure the popup is visible
-                _popup.IsOpen = true;
-            }
-
-            // set popup size
-            _popup.Width = _scrollViewer.ViewportWidth;
-            _popup.Height = RowHeight;
-
-            // set placement rectangle
+            // update position
             var pos = e.GetPosition(_scrollViewer);
-            pos.X = 0;
-            pos.Y = pos.Y - _popup.Height / 2;
-            _popup.PlacementRectangle = new Rect(pos, new Size(_popup.Width, _popup.Height));
+            (pos.X, pos.Y) = (0, pos.Y - _draggedItemIndicator.Height / 2);
+            _draggedItemIndicator.PlacementRectangle =
+                new Rect(pos, new Size(_draggedItemIndicator.Width, _draggedItemIndicator.Height));
 
-            //make sure the row under is being selected
-            var position = e.GetPosition(_scrollViewer);
-            var row = VisualHelper.TryFindByPoint<DataGridRow>(_scrollViewer, position);
-            if (row != null) SelectedItem = row.Item;
+            // the popup control will move with our mouse, use SelectedItem of DataGrid as indicator
+            // if the mouse is not over the DataGridRow, it can't be a drag event.
+            var row = VisualHelper.TryFindByPoint<DataGridRow>((UIElement) sender,
+                e.GetPosition(this));
+            SelectedItem = row?.Item;
+
+            // NEXT, FOCUS ON MOUSE LEFT BUTTON UP
         }
 
         /// <summary>
@@ -217,32 +236,75 @@ namespace JetSnailControlLibrary.WPF
         /// <param name="e"></param>
         private void OnPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if (_isEditing || _sorted || IsFiltering) return;
+            // prevent if CanUserDrag is false
+            if (!CanUserDrag) return;
 
-            // find the clicked row
-            var row = VisualHelper.TryFindByPoint<DataGridRow>((UIElement) sender,
-                e.GetPosition(this));
+            _isDragging = false;
 
-            if (row == null) return;
+            // if the user is editing or filtering the DataGrid, do not treat this as a drag event.
+            if (_isEditing || IsFiltering) return;
 
-            // set flag that indicates we're capturing mouse movements
-            _isDragging = true;
+            // if the DataGrid is sorted by columns, why drag to reorder it?
+            if (_sorted) return;
 
-            // store to dependency property so that can be used by other control
-            DraggedItem = row.Item;
+            // let's find the clicked row, if the mouse is not over the DataGridRow, it can't be a drag event.
+            _draggingRow = VisualHelper.TryFindByPoint<DataGridRow>((UIElement) sender,
+                Mouse.GetPosition(this));
+            if (_draggingRow == null) return;
 
+
+            // it's now very likely a drag event after rule out editing, filtering or sorted, in addition to the click happens on the DataGridRow. But it still could be a click on button rather than perform dragging. Drag event is only triggered after long pressed.
+            _dragTrigger.Start();
+        }
+
+        private void _dragTrigger_Tick(object sender, EventArgs e)
+        {
+            if (Mouse.LeftButton != MouseButtonState.Pressed) return;
+
+            // if mouse has already moved over other row , it's not a drag event
+            if (!ReferenceEquals(_draggingRow, VisualHelper.TryFindByPoint<DataGridRow>(this,
+                Mouse.GetPosition(this))))
+                return;
+
+            // Therefore, to make it a drag event, we should combine move event. However, we still store this row as DraggedItem in case that it is surely a drag event. 
+            DraggingItem = _draggingRow.Item;
+            
+            // dragging start
+
+            // also initialize a DataGrid to host this DraggedItem in popup control
             // add dragged item to popup
-            var border = new Border();
-            _popup.Child = border;
-
-            border.Child = new AutoFilterDataGrid
+            var border = new Border
             {
-                Opacity = 0.9,
-                HeadersVisibility = DataGridHeadersVisibility.None,
-                ItemsSource = new ObservableCollection<object> {row.Item},
-                HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden,
-                VerticalScrollBarVisibility = ScrollBarVisibility.Hidden
+                Child = new AutoFilterDataGrid
+                {
+                    ItemsSource = new ObservableCollection<object> {DraggingItem},
+                    Opacity = 0.9,
+                    IsReadOnly = true,
+                    HeadersVisibility = DataGridHeadersVisibility.None,
+                    HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden,
+                    VerticalScrollBarVisibility = ScrollBarVisibility.Hidden
+                }
             };
+            _draggedItemIndicator.Child = border;
+
+            // set popup size
+            _draggedItemIndicator.Width = _scrollViewer.ViewportWidth;
+            _draggedItemIndicator.Height = RowHeight;
+
+            // starting dragging event and capture mouse
+            _isDragging = true;
+            IsReadOnly = true;
+            Mouse.Capture(this);
+
+            // display popup as indicator
+            var pos = Mouse.GetPosition(_scrollViewer);
+            (pos.X, pos.Y) = (0, pos.Y - _draggedItemIndicator.Height / 2);
+            _draggedItemIndicator.PlacementRectangle = new Rect(pos,
+                new Size(_draggedItemIndicator.Width, _draggedItemIndicator.Height));
+
+            // show indicator and hide origin row
+            _draggedItemIndicator.IsOpen = true;
+            _draggingRow.Visibility = Visibility.Collapsed;
         }
 
         /// <summary>
@@ -252,30 +314,37 @@ namespace JetSnailControlLibrary.WPF
         /// <param name="e"></param>
         private void OnMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            if (!_isDragging || _isEditing || _sorted || SelectedItem == null) return;
+            _dragTrigger.Stop();
 
-            var targetItem = SelectedItem;
+            // prevent if CanUserDrag is false
+            if (!CanUserDrag) return;
 
-            if (targetItem == null || !ReferenceEquals(DraggedItem, targetItem))
-            {
-                //remove the source from the list
-                if (ItemsSource is IList itemsSource)
-                {
-                    //get target index
-                    var targetIndex = itemsSource.IndexOf(targetItem);
+            // if it's dragging event
+            if (_isDragging)
+                // if the current DataGridRow is DraggedItem, nothing happens
+                if (SelectedItem != null && !ReferenceEquals(DraggingItem, SelectedItem))
+                    // otherwise, delete the DraggedItem from ItemsSource and add to new position
+                    if (ItemsSource is IList itemsSource)
+                    {
+                        // get index
+                        var draggingItemIndex = itemsSource.IndexOf(DraggingItem);
+                        var targetIndex = itemsSource.IndexOf(SelectedItem);
 
-                    //move source at the target's location
-                    itemsSource.Insert(targetIndex, DraggedItem);
+                        if (draggingItemIndex < targetIndex)
+                            targetIndex -= 1;
 
-                    // fresh view
-                    CollectionViewSource.GetDefaultView(itemsSource).Refresh();
-                }
+                        // remove origin one
+                        itemsSource.Remove(DraggingItem);
 
-                //select the dropped item
-                SelectedItem = DraggedItem;
-            }
+                        // insert at the target's location
+                        itemsSource.Insert(targetIndex, DraggingItem);
+                        // select the new one
+                        SelectedItem = DraggingItem;
+                    }
 
-            //reset
+            // fresh view
+            CollectionViewSource.GetDefaultView(ItemsSource).Refresh();
+
             ResetDragDrop();
         }
 
@@ -284,10 +353,18 @@ namespace JetSnailControlLibrary.WPF
         /// </summary>
         private void ResetDragDrop()
         {
-            _popup.IsOpen = false;
-            _isDragging = false;
+            Mouse.Capture(null);
+
             _isEditing = false;
-            IsReadOnly = false;
+            _isDragging = false;
+
+            // set IsReadOnly back to user set
+            IsReadOnly = _defaultIsReadOnlyValue;
+
+            _draggingRow = null;
+            DraggingItem = null;
+
+            _draggedItemIndicator.IsOpen = false;
         }
 
         #endregion

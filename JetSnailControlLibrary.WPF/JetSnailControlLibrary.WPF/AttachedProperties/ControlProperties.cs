@@ -62,7 +62,9 @@ namespace JetSnailControlLibrary.WPF
 
             var listCollectionView = (ListCollectionView) CollectionViewSource.GetDefaultView(dataGrid.ItemsSource);
 
-            listCollectionView.CustomSort = new DataGridColumnNaturalComparer(dataGrid.SortedColumns);
+            listCollectionView.CustomSort = dataGrid.SortedColumns.Count == 0
+                ? null
+                : new DataGridColumnNaturalComparer(dataGrid.SortedColumns);
 
             e.Handled = true;
         }

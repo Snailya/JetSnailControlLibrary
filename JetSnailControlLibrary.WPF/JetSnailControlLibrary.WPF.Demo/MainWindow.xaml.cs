@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -24,6 +25,16 @@ namespace JetSnailControlLibrary.WPF.Demo
         private void ButtonBase2_OnClick(object sender, RoutedEventArgs e)
         {
             DataGridData.GenerateNewData();
+        }
+
+        private void ButtonBase3_OnClick(object sender, RoutedEventArgs e)
+        {
+            var index = new Random().Next();
+            DataGridData.Instance.Add(new DataViewModel()
+            {
+                Col1 = $"string{index}",
+                Col2 = index
+            });
         }
     }
 }

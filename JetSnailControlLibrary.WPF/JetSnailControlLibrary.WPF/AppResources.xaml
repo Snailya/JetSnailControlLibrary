@@ -1262,7 +1262,7 @@
     </Style.Triggers>
   </Style>
   <!---->
-  <!--Merged from file 12-DataGrid.xaml-->
+  <!--Merged from file 12-DataGrid.txaml-->
   <!-- String Filter View -->
   <Style TargetType="{x:Type local:StringFilterView}">
     <Setter Property="Template">
@@ -1333,7 +1333,7 @@
               </Border>
               <StackPanel Orientation="Vertical" Margin="10">
                 <ItemsPresenter />
-                <StackPanel Orientation="Horizontal" Margin="0 5 0 5">
+                <StackPanel Orientation="Horizontal" Margin="0 5 0 5" HorizontalAlignment="Right">
                   <Button Content="应用" Command="{Binding ApplyFilterCommand}" />
                   <Rectangle Width="10" />
                   <Button Content="重置" Command="{Binding ClearCommand}" />
@@ -1489,7 +1489,7 @@
     </Setter>
     <Setter Property="BorderThickness" Value="1" />
     <Setter Property="Border.CornerRadius" Value="0" />
-    <Setter Property="SortIndicatorColor" Value="{StaticResource Secondary}" />
+    <Setter Property="SortIndicatorColor" Value="{StaticResource Primary}" />
     <Setter Property="local:ColorProperties.SelectedBackgroundBrush">
       <Setter.Value>
         <SolidColorBrush Color="{StaticResource Primary}" Opacity="0.12" />
