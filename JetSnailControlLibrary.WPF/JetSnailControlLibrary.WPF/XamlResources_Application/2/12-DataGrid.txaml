@@ -339,9 +339,9 @@
                                 Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}"
                                 CornerRadius="{TemplateBinding Border.CornerRadius}"
                                 SnapsToDevicePixels="True">
-                            <ScrollViewer x:Name="DG_ScrollViewer" Focusable="false">
+                            <ScrollViewer x:Name="DG_ScrollViewer" Focusable="false" local:ControlProperties.IsBusy="{TemplateBinding local:ControlProperties.IsBusy}" >
                                 <ScrollViewer.Template>
-                                    <ControlTemplate TargetType="{x:Type ScrollViewer}">
+                                    <ControlTemplate TargetType="{x:Type ScrollViewer}" >
                                         <Grid>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="Auto" />

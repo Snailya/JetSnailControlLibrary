@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -268,22 +266,18 @@ namespace JetSnailControlLibrary.WPF
 
             // Therefore, to make it a drag event, we should combine move event. However, we still store this row as DraggedItem in case that it is surely a drag event. 
             DraggingItem = _draggingRow.Item;
-            
+
             // dragging start
 
             // also initialize a DataGrid to host this DraggedItem in popup control
             // add dragged item to popup
             var border = new Border
             {
-                Child = new AutoFilterDataGrid
-                {
-                    ItemsSource = new ObservableCollection<object> {DraggingItem},
-                    Opacity = 0.9,
-                    IsReadOnly = true,
-                    HeadersVisibility = DataGridHeadersVisibility.None,
-                    HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden,
-                    VerticalScrollBarVisibility = ScrollBarVisibility.Hidden
-                }
+                Child = new TextBlock {Text = DraggingItem.ToString()},
+                Background = _draggingRow.Background,
+                BorderThickness = new Thickness(1),
+                BorderBrush = _draggingRow.BorderBrush,
+                Padding = _draggingRow.Padding
             };
             _draggedItemIndicator.Child = border;
 
@@ -343,7 +337,8 @@ namespace JetSnailControlLibrary.WPF
                     }
 
             // fresh view
-            CollectionViewSource.GetDefaultView(ItemsSource).Refresh();
+            if (ItemsSource != null)
+                CollectionViewSource.GetDefaultView(ItemsSource).Refresh();
 
             ResetDragDrop();
         }

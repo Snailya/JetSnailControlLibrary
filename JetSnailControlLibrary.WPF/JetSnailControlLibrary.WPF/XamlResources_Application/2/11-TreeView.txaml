@@ -161,7 +161,7 @@
         <ControlTemplate TargetType="{x:Type TreeView}">
           <Border x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}" SnapsToDevicePixels="true">
             <Grid>
-              <ScrollViewer x:Name="_tv_scrollviewer_" Background="{TemplateBinding Background}"
+              <ScrollViewer x:Name="tv_scrollviewer" Background="{TemplateBinding Background}"
                             CanContentScroll="false" Focusable="false"
                             HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}"
                             Padding="{TemplateBinding Padding}"
@@ -170,7 +170,7 @@
                             Visibility="{TemplateBinding local:ControlProperties.IsBusy, Converter={local:BooleanToVisibilityConverter}}">
                 <ItemsPresenter />
               </ScrollViewer>
-              <Border Grid.ColumnSpan="2" Grid.Row="1"
+              <Border 
                       Visibility="{TemplateBinding local:ControlProperties.IsBusy, Converter={local:BooleanToVisibilityConverter}, ConverterParameter=True}">
                 <TextBlock Style="{StaticResource SpinningAnimation}" HorizontalAlignment="Center"
                            VerticalAlignment="Center" />
@@ -179,7 +179,7 @@
           </Border>
           <ControlTemplate.Triggers>
             <Trigger Property="VirtualizingPanel.IsVirtualizing" Value="true">
-              <Setter Property="CanContentScroll" TargetName="_tv_scrollviewer_" Value="true" />
+              <Setter Property="CanContentScroll" TargetName="tv_scrollviewer" Value="true" />
             </Trigger>
           </ControlTemplate.Triggers>
         </ControlTemplate>
