@@ -55,7 +55,7 @@ namespace JetSnailControlLibrary.WPF
             if (string.IsNullOrEmpty(bindingPath) || bindingPath.Contains(".")) return;
 
             // Get PropertyInfo of the binding
-            _columnInfo = _dataGrid.ItemsSource.GetType().GetGenericArguments()[0].GetProperty(bindingPath);
+            _columnInfo = _dataGrid.ItemsSource?.GetType().GetGenericArguments()[0].GetProperty(bindingPath);
             if (_columnInfo == null) return;
 
             #endregion
